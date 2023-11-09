@@ -12,7 +12,9 @@ userColumns = [
     "transactionNumber",
     "creditOnFile"
 ]
+
 ticketColumns = ["ticketNumber", "price", "remainingTickets"]
+
 eventColumns = ["eventName", "remainingTickets"]
 
 # Path to the backend data directory
@@ -31,8 +33,6 @@ def loadOrInitializeDf(fileName, columns, sep='\t'):
         df.to_csv(filePath, sep=sep, index=False)
         return df
 
-
-
 # File names
 userFileName = "users.txt"
 ticketFileName = "tickets.txt"
@@ -50,33 +50,6 @@ def login(username, password):
     else:
         # Login failed
         return False
-
-def defAddCredit(username):
-    global users
-
-    # Ensure the user exists
-    if username not in users['username'].values:
-        print("User not found.")
-        return
-
-    try:
-        # Prompt for the credit amount
-        amount = float(input("Enter the credit amount to add: $"))
-        if amount <= 0:
-            print("Invalid amount. Please enter a positive number.")
-            return
-
-        # Update the user's credit in the DataFrame
-        users.loc[users['username'] == username, 'creditOnFile'] += amount
-
-        print(f"${amount} credit added successfully to {username}'s account.")
-
-        # Optionally, save the updated DataFrame to the file
-        users.to_csv(os.path.join(dataDirPath, userFileName), sep='\t', index=False)
-    except ValueError:
-        print("Invalid input. Please enter a numerical value.")
-
-
 
 def createNewAccount():
     global users
@@ -119,6 +92,30 @@ def createNewAccount():
     
     print(f"User {username} created successfully.")
 
+def defAddCredit(username):
+    global users
+
+    # Ensure the user exists
+    if username not in users['username'].values:
+        print("User not found.")
+        return
+
+    try:
+        # Prompt for the credit amount
+        amount = float(input("Enter the credit amount to add: $"))
+        if amount <= 0:
+            print("Invalid amount. Please enter a positive number.")
+            return
+
+        # Update the user's credit in the DataFrame
+        users.loc[users['username'] == username, 'creditOnFile'] += amount
+
+        print(f"${amount} credit added successfully to {username}'s account.")
+
+        # Optionally, save the updated DataFrame to the file
+        users.to_csv(os.path.join(dataDirPath, userFileName), sep='\t', index=False)
+    except ValueError:
+        print("Invalid input. Please enter a numerical value.")
 
 
 
