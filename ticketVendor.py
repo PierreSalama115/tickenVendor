@@ -1,6 +1,8 @@
 import os
 from datetime import datetime, timedelta
-import ticketVendorBackEnd 
+import ticketVendorBackEnd
+import sys
+
 
 class User:
     """
@@ -60,7 +62,6 @@ class System:
     def optionN(self):
         ticketVendorBackEnd.createNewAccount()
 
-    # In the method option1 it allows the user to Add Credit to their account
     def option1(self):
         if self.is_logged_in:  # Check the login state variable
             print("You chose to Add Credit.")
@@ -69,15 +70,17 @@ class System:
                 credit_card = input("Enter your credit card number (16digits-MM/YY-CVV):  \n")
                 if len(credit_card) == 23:
                     # Call the backend function to add credit
-                    ticketVendorBackEnd.defAddCredit(self.current_user.username, int(amount))
+                    ticketVendorBackEnd.addCredit(self.current_user, int(amount))  # Pass the current username
                     print("You have successfully added credit to your account. Press Enter to continue...")
                 else:
-                    print("Credit Card number should be (16digits-MM/YY-CVV). Returning to main menu...")
+                    print("Credit Card number should be (16digits-MM/YY-CVV). Returning to the main menu...")
             else:
-                print("Invalid credit amount. Returning to main menu.")
+                print("Invalid credit amount. Returning to the main menu.")
         else:
             print("You need to be logged in to access this option.")
         input("Press Enter to continue...  \n")
+    
+
 
     # In the method option2 it allows the user to create an event from tomorrow's date to 2 years from today if the user is an admin
     def option2(self):
@@ -177,8 +180,8 @@ class System:
         self.current_user = None
         self.is_logged_in = False
         print("saving to database...\n" + "***TERMINATE PROGRAM****")
-        exit()
-
+        ticketVendorBackEnd.exitProgram()
+        
     # This is the main menu that will be displayed when the program is run and the user picks there choice
     def main_menu(self):
         while True:
